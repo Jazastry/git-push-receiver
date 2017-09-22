@@ -1,11 +1,11 @@
-try {
-    let express = require('express'),
-        app = express(),
-        logger = require('./app_modules/loger.js'),
-        serverPort = 8888,
-        createHandler = require('github-webhook-handler'),
-        gitPushHandler = createHandler({ path: '/git-push', secret: '' });
+let express = require('express'),
+    app = express(),
+    logger = require('./app_modules/loger.js'),
+    serverPort = 8888,
+    createHandler = require('github-webhook-handler'),
+    gitPushHandler = createHandler({ path: '/git-push', secret: '' });
 
+try {
     app.use(gitPushHandler)
 
     gitPushHandler.on('error', function(err) {

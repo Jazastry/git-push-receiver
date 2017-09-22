@@ -1,26 +1,28 @@
 try {
-    // express initialization
-    var express = require('express');
-    let bodyParser = require('body-parser');
-    var app = express();
-    let logger = require('./app_modules/loger.js');
-    var serverPort = 8888;
-    app.use(bodyParser.json());
-    app.post('/git-push', function(req, res) {
-        let data = {
-            id: 'REQUEST',
-            METHOD: req.method,
-            HEAD: req.headers,
-            BODY: req.body
-        };
-        logger.log(data);
-        res.send('OK');
-    });
+    let express = require('express');
+    app = express(),
+        logger = require('./app_modules/loger.js'),
+        serverPort = 8888,
+        createHandler = require('github-webhook-handler'),
+        gitPushHandler = createHandler({ path: '/git-push', secret: '' });
+
+    app.use(gitPushHandler)
+
+    gitPushHandler.on('error', function (err) {
+      console.error('Error:', err.message)
+    })
+
+    gitPushHandler.on('push', function (event) {
+      console.log('Received a push event for %s to %s',
+        event.payload.repository.name,
+        event.payload.ref)
+    })
 
     var server = app.listen(serverPort, function() {
         let data = {
             id: 'INITIALIZATION',
-            message: `listening on port ${serverPort}`
+            message: `listening on port ${serverPort}`,
+            date: new Date().toString()
         };
         logger.log(data);
     });

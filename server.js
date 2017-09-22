@@ -1,6 +1,6 @@
 try {
-    let express = require('express');
-    app = express(),
+    let express = require('express'),
+        app = express(),
         logger = require('./app_modules/loger.js'),
         serverPort = 8888,
         createHandler = require('github-webhook-handler'),
@@ -8,14 +8,14 @@ try {
 
     app.use(gitPushHandler)
 
-    gitPushHandler.on('error', function (err) {
-      console.error('Error:', err.message)
+    gitPushHandler.on('error', function(err) {
+        console.error('Error:', err.message)
     })
 
-    gitPushHandler.on('push', function (event) {
-      console.log('Received a push event for %s to %s',
-        event.payload.repository.name,
-        event.payload.ref)
+    gitPushHandler.on('push', function(event) {
+        console.log('Received a push event for %s to %s',
+            event.payload.repository.name,
+            event.payload.ref)
     })
 
     var server = app.listen(serverPort, function() {

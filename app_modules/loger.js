@@ -11,7 +11,7 @@ module.exports = (function() {
             return this.write(obj);
         }
 
-        err() {
+        err(obj) {
             obj.type = 'ERR';
             return this.write(obj);
         }
